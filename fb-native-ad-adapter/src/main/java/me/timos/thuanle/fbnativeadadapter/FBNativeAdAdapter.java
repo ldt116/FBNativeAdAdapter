@@ -1,6 +1,7 @@
 package me.timos.thuanle.fbnativeadadapter;
 
 import android.content.Context;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -114,11 +115,13 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
 
     public RecyclerView.ViewHolder onCreateAdViewHolder(ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ViewGroup adLayoutOutline = (ViewGroup) inflater
-                .inflate(mParam.containerLayoutRes, parent, false);
+        View adLayoutOutline = inflater
+                .inflate(mParam.itemContainerLayoutRes, parent, false);
+        ViewGroup vg = (ViewGroup) adLayoutOutline.findViewById(mParam.itemContainerId);
+
         LinearLayout adLayoutContent = (LinearLayout) inflater
                 .inflate(R.layout.item_facebook_native_ad, parent, false);
-        adLayoutOutline.addView(adLayoutContent);
+        vg.addView(adLayoutContent);
         return new AdViewHolder(adLayoutOutline);
     }
 
@@ -136,7 +139,10 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         int adItemInterval;
 
         @LayoutRes
-        int containerLayoutRes;
+        int itemContainerLayoutRes;
+
+        @IdRes
+        int itemContainerId;
     }
 
     public static class Builder {
@@ -153,7 +159,8 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
 
             //default value
             param.adItemInterval = DEFAULT_AD_ITEM_INTERVAL;
-            param.containerLayoutRes = R.layout.item_facebook_native_ad_outline;
+            param.itemContainerLayoutRes = R.layout.item_facebook_native_ad_outline;
+            param.itemContainerId = R.id.ad_container;
             return new Builder(param);
         }
 
@@ -162,8 +169,9 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
             return this;
         }
 
-        public Builder adLayout(@LayoutRes int layoutContainerRes) {
-            mParam.containerLayoutRes = layoutContainerRes;
+        public Builder adLayout(@LayoutRes int layoutContainerRes, @IdRes int itemContainerId) {
+            mParam.itemContainerLayoutRes = layoutContainerRes;
+            mParam.itemContainerId = itemContainerId;
             return this;
         }
 
