@@ -7,5 +7,5 @@
 You can get `FBNativeAdAdapter` via `jCenter` repository
 
 ```groovy
-compile me.timos.thuanle:fb-native-ad-adapter:1.2.0
+compile 'me.timos.thuanle:fb-native-ad-adapter:1.2.0'
 ```
