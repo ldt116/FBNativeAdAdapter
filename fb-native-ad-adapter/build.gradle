@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/ldt116/FBNativeAdAdapter'
     gitUrl = 'https://github.com/ldt116/FBNativeAdAdapter.git'
 
-    libraryVersion = '1.1.0'
+    libraryVersion = '1.2.0'
 
     developerId = 'ldt116'
     developerName = 'Thuan Le'
@@ -31,8 +31,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 3
-        versionName "1.3.0"
+        versionCode 10002
+        versionName "1.2.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
