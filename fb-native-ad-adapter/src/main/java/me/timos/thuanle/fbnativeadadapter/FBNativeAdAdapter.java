@@ -62,46 +62,51 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
 
     public void onBindAdViewHolder(final RecyclerView.ViewHolder holder) {
         final AdViewHolder adHolder = (AdViewHolder) holder;
-        final NativeAd nativeAd = new NativeAd(adHolder.getContext(), mParam.facebookPlacementId);
-        nativeAd.setAdListener(new AbstractAdListener() {
-            @Override
-            public void onAdLoaded(Ad ad) {
-                if (ad != nativeAd) {
-                    return;
+        if (mParam.forceReloadAdOnBind || !adHolder.loaded) {
+            final NativeAd nativeAd = new NativeAd(adHolder.getContext(), mParam.facebookPlacementId);
+            nativeAd.setAdListener(new AbstractAdListener() {
+                @Override
+                public void onAdLoaded(Ad ad) {
+                    if (ad != nativeAd) {
+                        return;
+                    }
+                    adHolder.nativeAdContainer.setVisibility(View.VISIBLE);
+
+
+                    // Set the Text.
+                    adHolder.nativeAdTitle.setText(nativeAd.getAdTitle());
+                    adHolder.nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
+                    adHolder.nativeAdBody.setText(nativeAd.getAdBody());
+                    adHolder.nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
+
+                    // Download and display the ad icon.
+                    NativeAd.Image adIcon = nativeAd.getAdIcon();
+                    NativeAd.downloadAndDisplayImage(adIcon, adHolder.nativeAdIcon);
+
+                    // Download and display the cover image.
+                    adHolder.nativeAdMedia.setNativeAd(nativeAd);
+
+                    // Add the AdChoices icon
+                    AdChoicesView adChoicesView = new AdChoicesView(adHolder.getContext(), nativeAd, true);
+                    adHolder.adChoicesContainer.removeAllViews();
+                    adHolder.adChoicesContainer.addView(adChoicesView);
+
+                    // Register the Title and CTA button to listen for clicks.
+                    List<View> clickableViews = new ArrayList<>();
+                    clickableViews.add(adHolder.nativeAdTitle);
+                    clickableViews.add(adHolder.nativeAdCallToAction);
+                    nativeAd.registerViewForInteraction(adHolder.nativeAdContainer, clickableViews);
+
+                    adHolder.loaded = true;
                 }
-                adHolder.nativeAdContainer.setVisibility(View.VISIBLE);
 
-                // Set the Text.
-                adHolder.nativeAdTitle.setText(nativeAd.getAdTitle());
-                adHolder.nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
-                adHolder.nativeAdBody.setText(nativeAd.getAdBody());
-                adHolder.nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
-
-                // Download and display the ad icon.
-                NativeAd.Image adIcon = nativeAd.getAdIcon();
-                NativeAd.downloadAndDisplayImage(adIcon, adHolder.nativeAdIcon);
-
-                // Download and display the cover image.
-                adHolder.nativeAdMedia.setNativeAd(nativeAd);
-
-                // Add the AdChoices icon
-                AdChoicesView adChoicesView = new AdChoicesView(adHolder.getContext(), nativeAd, true);
-                adHolder.adChoicesContainer.removeAllViews();
-                adHolder.adChoicesContainer.addView(adChoicesView);
-
-                // Register the Title and CTA button to listen for clicks.
-                List<View> clickableViews = new ArrayList<>();
-                clickableViews.add(adHolder.nativeAdTitle);
-                clickableViews.add(adHolder.nativeAdCallToAction);
-                nativeAd.registerViewForInteraction(adHolder.nativeAdContainer, clickableViews);
-            }
-
-            @Override
-            public void onError(Ad ad, AdError adError) {
-                adHolder.nativeAdContainer.setVisibility(View.GONE);
-            }
-        });
-        nativeAd.loadAd();
+                @Override
+                public void onError(Ad ad, AdError adError) {
+                    adHolder.nativeAdContainer.setVisibility(View.GONE);
+                }
+            });
+            nativeAd.loadAd();
+        }
     }
 
     @Override
@@ -137,6 +142,7 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         String facebookPlacementId;
         RecyclerView.Adapter adapter;
         int adItemInterval;
+        boolean forceReloadAdOnBind;
 
         @LayoutRes
         int itemContainerLayoutRes;
@@ -161,6 +167,7 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
             param.adItemInterval = DEFAULT_AD_ITEM_INTERVAL;
             param.itemContainerLayoutRes = R.layout.item_facebook_native_ad_outline;
             param.itemContainerId = R.id.ad_container;
+            param.forceReloadAdOnBind = true;
             return new Builder(param);
         }
 
@@ -172,6 +179,11 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         public Builder adLayout(@LayoutRes int layoutContainerRes, @IdRes int itemContainerId) {
             mParam.itemContainerLayoutRes = layoutContainerRes;
             mParam.itemContainerId = itemContainerId;
+            return this;
+        }
+
+        public Builder forceReloadAdOnBind(boolean forced){
+            mParam.forceReloadAdOnBind = forced;
             return this;
         }
 
@@ -189,6 +201,7 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         Button nativeAdCallToAction;
         LinearLayout adChoicesContainer;
         LinearLayout nativeAdContainer;
+        boolean loaded;
 
         AdViewHolder(View view) {
             super(view);
@@ -200,6 +213,7 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
             nativeAdBody = (TextView) view.findViewById(R.id.native_ad_body);
             nativeAdCallToAction = (Button) view.findViewById(R.id.native_ad_call_to_action);
             adChoicesContainer = (LinearLayout) view.findViewById(R.id.ad_choices_container);
+            loaded = false;
         }
 
         public Context getContext() {
