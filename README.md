@@ -38,7 +38,8 @@ rv.setLayoutManager(lm);
 rv.setAdapter(fbAdapter);
 ```
 
-![](https://github.com/ldt116/FBNativeAdAdapter/blob/master/images/ss_grid_span_column.png =256px)
+<img src="/images/ss_grid_span_column.png" width="128">
+
 
 # Contribution
 
