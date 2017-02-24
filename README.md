@@ -38,7 +38,7 @@ rv.setLayoutManager(lm);
 rv.setAdapter(fbAdapter);
 ```
 
-<img src="/images/ss_grid_span_column.png" width="128">
+<img src="/images/ss_grid_span_column.png" width="512">
 
 
 # Contribution
