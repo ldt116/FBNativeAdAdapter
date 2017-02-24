@@ -1,6 +1,6 @@
 # FBNativeAdAdapter
 
-`FBNativeAdAdapter` provide a `RecyclerView.Adapter` wrapper which can show [Facebook Audience Network Native Ad](https://developers.facebook.com/docs/audience-network/native-ads). `FBNativeAdAdapter` helps you easily add the native ad among your data in `RecyclerView.Adapter`.
+`FBNativeAdAdapter` helps you easily add  [Facebook Audience Network Native Ad](https://developers.facebook.com/docs/audience-network/native-ads) among your data in `RecyclerView.Adapter`.
 
 <img src="/images/ss_linear.png" width="256">
 <img src="/images/ss_staggered_grid.png" width="256">
