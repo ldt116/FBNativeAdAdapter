@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import me.timos.thuanle.fbnativeadadapter.FBNativeAdAdapter;
 
-public class GridAdActivity extends AppCompatActivity {
+public class GridSpanAdActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -15,10 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".LinearAdActivity">
-        </activity>
-        <activity android:name=".GridAdActivity">
-        </activity>
+        <activity android:name=".LinearAdActivity"/>
+        <activity android:name=".GridSpanAdActivity"/>
+        <activity android:name=".StaggeredGridAdActivity"/>
     </application>
 
 </manifest>

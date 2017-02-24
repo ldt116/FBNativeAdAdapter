@@ -23,7 +23,15 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnGrid).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(MainActivity.this, GridAdActivity.class);
+                Intent it = new Intent(MainActivity.this, StaggeredGridAdActivity.class);
+                startActivity(it);
+            }
+        });
+
+        findViewById(R.id.btnGridSpan).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(MainActivity.this, GridSpanAdActivity.class);
                 startActivity(it);
             }
         });

@@ -22,5 +22,11 @@
         android:id="@+id/btnGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Staggered Grid Recycler"/>
+
+    <Button
+        android:id="@+id/btnGridSpan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Grid Recycler with span columns"/>
 </LinearLayout>
