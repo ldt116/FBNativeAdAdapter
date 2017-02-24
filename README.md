@@ -38,7 +38,7 @@ rv.setLayoutManager(lm);
 rv.setAdapter(fbAdapter);
 ```
 
-![Screenshot of ad span between columns](https://github.com/ldt116/FBNativeAdAdapter/blob/master/images/ss_grid_span_column.png)
+![](https://github.com/ldt116/FBNativeAdAdapter/blob/master/images/ss_grid_span_column.png =256px)
 
 # Contribution
 
