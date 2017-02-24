@@ -3,6 +3,7 @@ package me.timos.thuanle.fbnativeadadapter;
 import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,25 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
     private FBNativeAdAdapter(Param param) {
         super(param.adapter);
         this.mParam = param;
+
+        assertConfig();
+        setSpanAds();
+    }
+
+    private void setSpanAds() {
+        if (mParam.gridLayoutManager == null) {
+            return ;
+        }
+        final GridLayoutManager ssl = mParam.gridLayoutManager;
+        mParam.gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (isAdPosition(position)){
+                    return ssl.getSpanCount();
+                }
+                return 1;
+            }
+        });
     }
 
     private int convertAdPosition2OrgPosition(int position) {
@@ -149,6 +169,8 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
 
         @IdRes
         int itemContainerId;
+
+        GridLayoutManager gridLayoutManager;
     }
 
     public static class Builder {
@@ -182,13 +204,28 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
             return this;
         }
 
-        public Builder forceReloadAdOnBind(boolean forced){
+        public Builder forceReloadAdOnBind(boolean forced) {
             mParam.forceReloadAdOnBind = forced;
+            return this;
+        }
+
+        public Builder enableSpanRow(GridLayoutManager layoutManager) {
+            mParam.gridLayoutManager = layoutManager;
             return this;
         }
 
         public FBNativeAdAdapter build() {
             return new FBNativeAdAdapter(mParam);
+        }
+    }
+
+    private void assertConfig() {
+        if (mParam.gridLayoutManager != null) {
+            //if user set span ads
+            int nCol = mParam.gridLayoutManager.getSpanCount();
+            if (mParam.adItemInterval % nCol != 0) {
+                throw new IllegalArgumentException(String.format("The adItemInterval (%d) is not divisible by number of columns in GridLayoutManager (%d)", mParam.adItemInterval, nCol));
+            }
         }
     }
 

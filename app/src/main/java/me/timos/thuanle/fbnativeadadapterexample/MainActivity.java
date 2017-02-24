@@ -1,11 +1,9 @@
 package me.timos.thuanle.fbnativeadadapterexample;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
-import me.timos.thuanle.fbnativeadadapter.FBNativeAdAdapter;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,12 +12,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MyAdapter adapter = new MyAdapter();
-        FBNativeAdAdapter fbAdapter = FBNativeAdAdapter.Builder.with("469109283477914_473204296401746", adapter)
-                .build();
+        findViewById(R.id.btnLinear).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(MainActivity.this, LinearAdActivity.class);
+                startActivity(it);
+            }
+        });
 
-        RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
-        rv.setAdapter(fbAdapter);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        findViewById(R.id.btnGrid).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(MainActivity.this, GridAdActivity.class);
+                startActivity(it);
+            }
+        });
     }
 }

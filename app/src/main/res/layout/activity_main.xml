@@ -8,11 +8,19 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="me.timos.thuanle.fbnativeadadapterexample.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv"
+    <Button
+        android:id="@+id/btnLinear"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:text="Linear Recycler"/>
+
+    <Button
+        android:id="@+id/btnGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Grid Recycler with span columns"/>
 </LinearLayout>
