@@ -42,20 +42,14 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         setSpanAds();
     }
 
-    private void setSpanAds() {
-        if (mParam.gridLayoutManager == null) {
-            return ;
-        }
-        final GridLayoutManager ssl = mParam.gridLayoutManager;
-        mParam.gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                if (isAdPosition(position)){
-                    return ssl.getSpanCount();
-                }
-                return 1;
+    private void assertConfig() {
+        if (mParam.gridLayoutManager != null) {
+            //if user set span ads
+            int nCol = mParam.gridLayoutManager.getSpanCount();
+            if (mParam.adItemInterval % nCol != 0) {
+                throw new IllegalArgumentException(String.format("The adItemInterval (%d) is not divisible by number of columns in GridLayoutManager (%d)", mParam.adItemInterval, nCol));
             }
-        });
+        }
     }
 
     private int convertAdPosition2OrgPosition(int position) {
@@ -158,6 +152,22 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         return super.onCreateViewHolder(parent, viewType);
     }
 
+    private void setSpanAds() {
+        if (mParam.gridLayoutManager == null) {
+            return ;
+        }
+        final GridLayoutManager ssl = mParam.gridLayoutManager;
+        mParam.gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (isAdPosition(position)){
+                    return ssl.getSpanCount();
+                }
+                return 1;
+            }
+        });
+    }
+
     private static class Param {
         String facebookPlacementId;
         RecyclerView.Adapter adapter;
@@ -204,9 +214,8 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
             return this;
         }
 
-        public Builder forceReloadAdOnBind(boolean forced) {
-            mParam.forceReloadAdOnBind = forced;
-            return this;
+        public FBNativeAdAdapter build() {
+            return new FBNativeAdAdapter(mParam);
         }
 
         public Builder enableSpanRow(GridLayoutManager layoutManager) {
@@ -214,18 +223,9 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
             return this;
         }
 
-        public FBNativeAdAdapter build() {
-            return new FBNativeAdAdapter(mParam);
-        }
-    }
-
-    private void assertConfig() {
-        if (mParam.gridLayoutManager != null) {
-            //if user set span ads
-            int nCol = mParam.gridLayoutManager.getSpanCount();
-            if (mParam.adItemInterval % nCol != 0) {
-                throw new IllegalArgumentException(String.format("The adItemInterval (%d) is not divisible by number of columns in GridLayoutManager (%d)", mParam.adItemInterval, nCol));
-            }
+        public Builder forceReloadAdOnBind(boolean forced) {
+            mParam.forceReloadAdOnBind = forced;
+            return this;
         }
     }
 
