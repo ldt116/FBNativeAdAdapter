@@ -156,12 +156,12 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         if (mParam.gridLayoutManager == null) {
             return ;
         }
-        final GridLayoutManager ssl = mParam.gridLayoutManager;
+        final GridLayoutManager.SpanSizeLookup spl = mParam.gridLayoutManager.getSpanSizeLookup();
         mParam.gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 if (isAdPosition(position)){
-                    return ssl.getSpanCount();
+                    return spl.getSpanSize(position);
                 }
                 return 1;
             }
