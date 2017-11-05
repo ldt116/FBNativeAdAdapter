@@ -203,7 +203,7 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
             return new Builder(param);
         }
 
-        public Builder adItemIterval(int interval) {
+        public Builder adItemInterval(int interval) {
             mParam.adItemInterval = interval;
             return this;
         }

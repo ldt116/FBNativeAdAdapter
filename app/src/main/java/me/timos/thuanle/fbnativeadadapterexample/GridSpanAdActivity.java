@@ -17,7 +17,7 @@ public class GridSpanAdActivity extends AppCompatActivity {
         GridLayoutManager lm = new GridLayoutManager(this, 3);
         MyAdapter adapter = new MyAdapter();
         FBNativeAdAdapter fbAdapter = FBNativeAdAdapter.Builder.with("469109283477914_473204296401746", adapter)
-                .adItemIterval(9)
+                .adItemInterval(9)
                 .enableSpanRow(lm)
                 .build();
 
