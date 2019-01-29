@@ -27,10 +27,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.VH> {
         holder.tv.setText(String.valueOf(position));
     }
 
-    public static class VH extends RecyclerView.ViewHolder {
+    static class VH extends RecyclerView.ViewHolder {
         TextView tv;
 
-        public VH(View itemView) {
+        VH(View itemView) {
             super(itemView);
 
             tv = (TextView) itemView.findViewById(R.id.tv);
