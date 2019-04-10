@@ -13,24 +13,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.ads.AbstractAdListener;
 import com.facebook.ads.Ad;
-import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
+import com.facebook.ads.AdOptionsView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
+import com.facebook.ads.NativeAdListener;
 import com.rockerhieu.rvadapter.RecyclerViewAdapterWrapper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by thuanle on 2/12/17.
  */
 public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
 
-    public static final int TYPE_FB_NATIVE_ADS = 900;
-    public static final int DEFAULT_AD_ITEM_INTERVAL = 10;
+    private static final int TYPE_FB_NATIVE_ADS = 900;
+    private static final int DEFAULT_AD_ITEM_INTERVAL = 10;
 
     private final Param mParam;
 
@@ -74,11 +71,21 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         return (position + 1) % (mParam.adItemInterval + 1) == 0;
     }
 
-    public void onBindAdViewHolder(final RecyclerView.ViewHolder holder) {
+    private void onBindAdViewHolder(final RecyclerView.ViewHolder holder) {
         final AdViewHolder adHolder = (AdViewHolder) holder;
         if (mParam.forceReloadAdOnBind || !adHolder.loaded) {
             final NativeAd nativeAd = new NativeAd(adHolder.getContext(), mParam.facebookPlacementId);
-            nativeAd.setAdListener(new AbstractAdListener() {
+            nativeAd.setAdListener(new NativeAdListener() {
+                @Override
+                public void onMediaDownloaded(Ad ad) {
+
+                }
+
+                @Override
+                public void onError(Ad ad, AdError adError) {
+                    adHolder.nativeAdContainer.setVisibility(View.GONE);
+                }
+
                 @Override
                 public void onAdLoaded(Ad ad) {
                     if (ad != nativeAd) {
@@ -88,35 +95,37 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
 
 
                     // Set the Text.
-                    adHolder.nativeAdTitle.setText(nativeAd.getAdTitle());
+                    // adHolder.nativeAdTitle.setText(nativeAd.getAdTitle());
+                    adHolder.nativeAdTitle.setText(nativeAd.getAdvertiserName());
                     adHolder.nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
-                    adHolder.nativeAdBody.setText(nativeAd.getAdBody());
+                    adHolder.nativeAdBody.setText(nativeAd.getAdBodyText());
                     adHolder.nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
-
-                    // Download and display the ad icon.
-                    NativeAd.Image adIcon = nativeAd.getAdIcon();
-                    NativeAd.downloadAndDisplayImage(adIcon, adHolder.nativeAdIcon);
 
                     // Download and display the cover image.
                     adHolder.nativeAdMedia.setNativeAd(nativeAd);
 
                     // Add the AdChoices icon
-                    AdChoicesView adChoicesView = new AdChoicesView(adHolder.getContext(), nativeAd, true);
+                    AdOptionsView adChoicesView = new AdOptionsView(adHolder.getContext(), nativeAd, null);
                     adHolder.adChoicesContainer.removeAllViews();
                     adHolder.adChoicesContainer.addView(adChoicesView);
 
                     // Register the Title and CTA button to listen for clicks.
-                    List<View> clickableViews = new ArrayList<>();
-                    clickableViews.add(adHolder.nativeAdTitle);
-                    clickableViews.add(adHolder.nativeAdCallToAction);
-                    nativeAd.registerViewForInteraction(adHolder.nativeAdContainer, clickableViews);
+                    adHolder.nativeAdMedia.addView(adHolder.nativeAdTitle);
+                    adHolder.nativeAdMedia.addView(adHolder.nativeAdCallToAction);
+
+                    nativeAd.registerViewForInteraction(adHolder.nativeAdContainer, adHolder.nativeAdMedia, adHolder.nativeAdIcon);
 
                     adHolder.loaded = true;
                 }
 
                 @Override
-                public void onError(Ad ad, AdError adError) {
-                    adHolder.nativeAdContainer.setVisibility(View.GONE);
+                public void onAdClicked(Ad ad) {
+
+                }
+
+                @Override
+                public void onLoggingImpression(Ad ad) {
+
                 }
             });
             nativeAd.loadAd();
@@ -132,11 +141,11 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
         }
     }
 
-    public RecyclerView.ViewHolder onCreateAdViewHolder(ViewGroup parent) {
+    private RecyclerView.ViewHolder onCreateAdViewHolder(ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View adLayoutOutline = inflater
                 .inflate(mParam.itemContainerLayoutRes, parent, false);
-        ViewGroup vg = (ViewGroup) adLayoutOutline.findViewById(mParam.itemContainerId);
+        ViewGroup vg = adLayoutOutline.findViewById(mParam.itemContainerId);
 
         LinearLayout adLayoutContent = (LinearLayout) inflater
                 .inflate(R.layout.item_facebook_native_ad, parent, false);
@@ -242,18 +251,18 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
 
         AdViewHolder(View view) {
             super(view);
-            nativeAdContainer = (LinearLayout) view.findViewById(R.id.fb_native_ad_container);
-            nativeAdIcon = (ImageView) view.findViewById(R.id.native_ad_icon);
-            nativeAdTitle = (TextView) view.findViewById(R.id.native_ad_title);
-            nativeAdMedia = (MediaView) view.findViewById(R.id.native_ad_media);
-            nativeAdSocialContext = (TextView) view.findViewById(R.id.native_ad_social_context);
-            nativeAdBody = (TextView) view.findViewById(R.id.native_ad_body);
-            nativeAdCallToAction = (Button) view.findViewById(R.id.native_ad_call_to_action);
-            adChoicesContainer = (LinearLayout) view.findViewById(R.id.ad_choices_container);
+            nativeAdContainer = view.findViewById(R.id.fb_native_ad_container);
+            nativeAdIcon = view.findViewById(R.id.native_ad_icon);
+            nativeAdTitle = view.findViewById(R.id.native_ad_title);
+            nativeAdMedia = view.findViewById(R.id.native_ad_media);
+            nativeAdSocialContext = view.findViewById(R.id.native_ad_social_context);
+            nativeAdBody = view.findViewById(R.id.native_ad_body);
+            nativeAdCallToAction = view.findViewById(R.id.native_ad_call_to_action);
+            adChoicesContainer = view.findViewById(R.id.ad_choices_container);
             loaded = false;
         }
 
-        public Context getContext() {
+        Context getContext() {
             return nativeAdContainer.getContext();
         }
     }
