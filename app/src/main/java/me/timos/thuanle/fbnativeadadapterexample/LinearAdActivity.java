@@ -16,7 +16,7 @@ public class LinearAdActivity extends AppCompatActivity {
 
         MyAdapter adapter = new MyAdapter();
         FBNativeAdAdapter fbAdapter = FBNativeAdAdapter.Builder
-                .with("321357575164976_321357668498300", adapter)
+                .with("321357575164976_321357668498300", 2, adapter)
                 .build();
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
