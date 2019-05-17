@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FBNativeAdAdapter.iml" filepath="$PROJECT_DIR$/FBNativeAdAdapter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fb-native-ad-adapter/fb-native-ad-adapter.iml" filepath="$PROJECT_DIR$/fb-native-ad-adapter/fb-native-ad-adapter.iml" />
+    </modules>
+  </component>
+</project>

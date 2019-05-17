@@ -102,7 +102,7 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
                     adHolder.nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
 
                     // Download and display the cover image.
-                    adHolder.nativeAdMedia.setNativeAd(nativeAd);
+                    //adHolder.nativeAdMedia.(nativeAd);
 
                     // Add the AdChoices icon
                     AdOptionsView adChoicesView = new AdOptionsView(adHolder.getContext(), nativeAd, null);
