@@ -27,7 +27,7 @@ import com.rockerhieu.rvadapter.RecyclerViewAdapterWrapper;
 public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
 
     private static final int TYPE_FB_NATIVE_ADS = 900;
-    private static final int DEFAULT_AD_ITEM_INTERVAL = 10;
+    public static int DEFAULT_AD_ITEM_INTERVAL = 0;
 
     private final Param mParam;
 
@@ -102,7 +102,12 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
                     adHolder.nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
 
                     // Download and display the cover image.
-                    adHolder.nativeAdMedia.setNativeAd(nativeAd);
+                    //adHolder.nativeAdMedia.(nativeAd);
+
+                    /**
+                     *  from 5 they make private .setNativeAd
+                     */
+
 
                     // Add the AdChoices icon
                     AdOptionsView adChoicesView = new AdOptionsView(adHolder.getContext(), nativeAd, null);
@@ -199,11 +204,11 @@ public class FBNativeAdAdapter extends RecyclerViewAdapterWrapper {
             mParam = param;
         }
 
-        public static Builder with(String placementId, RecyclerView.Adapter wrapped) {
+        public static Builder with(String placementId,int itemCount, RecyclerView.Adapter wrapped) {
             Param param = new Param();
             param.facebookPlacementId = placementId;
             param.adapter = wrapped;
-
+            DEFAULT_AD_ITEM_INTERVAL = itemCount;
             //default value
             param.adItemInterval = DEFAULT_AD_ITEM_INTERVAL;
             param.itemContainerLayoutRes = R.layout.item_facebook_native_ad_outline;
